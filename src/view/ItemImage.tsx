@@ -10,9 +10,11 @@ interface Props extends SizedProps {
   src?: string,
 };
 
-const Image = styled.img`
+const Image = styled.div`
   width: ${(props: Props) => props.size};
   height: ${(props: Props) => props.size};
+  background: url(${(props: Props) => props.src}) 50% 50% no-repeat;
+  background-size: cover;
 `;
 
 const NoImage = styled.div`

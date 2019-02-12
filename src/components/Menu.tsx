@@ -21,6 +21,7 @@ const Menu = ({ }) => (
       price={1100}
       name="Moo shu pork"
       description="Who knew tacos were invented in China? Shredded pork, cabbage, and birds-eye chiles."
+      imageUrl="https://static01.nyt.com/images/2016/09/28/dining/28CHINESE-WEB2/28CHINESE-WEB2-articleLarge.jpg"
     />
   </div>
 );
