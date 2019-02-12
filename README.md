@@ -12,3 +12,9 @@
 * ensure you are on the correct branch for your backend
 * `cp .env.example .env` and fill in for your backend
 * `yarn start`
+
+### Resources
+
+* https://www.howtographql.com/react-apollo
+* https://github.com/prisma/graphql-yoga/issues/424
+* https://github.com/apollographql/subscriptions-transport-ws/issues/466
