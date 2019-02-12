@@ -10,6 +10,7 @@ import { createHttpLink } from 'apollo-link-http';
 import { WebSocketLink } from 'apollo-link-ws';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { getMainDefinition } from 'apollo-utilities';
+import { BrowserRouter } from 'react-router-dom';
 
 /*
 const wsLink = new WebSocketLink({
@@ -30,12 +31,14 @@ const httpLink = createHttpLink({
 
 const apolloClient = new ApolloClient({
   link: httpLink,
-  cache: new InMemoryCache()
+  cache: new InMemoryCache(),
 })
 
 ReactDOM.render(
-  <ApolloProvider client={apolloClient}>
-    <App />
-  </ApolloProvider>,
+  <BrowserRouter>
+    <ApolloProvider client={apolloClient}>
+      <App />
+    </ApolloProvider>
+  </BrowserRouter>,
   document.getElementById('root'),
 );
