@@ -43,7 +43,7 @@ class UserMenu extends Component<{}, UserMenuState> {
 
   renderMenu() {
     return (
-      <PopMenu top="0px" ref={this.menuRef}>
+      <PopMenu top="0px">
         <button>My orders</button>
         <button>Logout</button>
       </PopMenu>
@@ -56,7 +56,9 @@ class UserMenu extends Component<{}, UserMenuState> {
         <button onClick={this.showMenu}>
           user@email.com
         </button>
-        { this.state.showMenu && this.renderMenu() }
+        <div ref={this.menuRef}>
+          { this.state.showMenu && this.renderMenu() }
+        </div>          
       </div>
     );
   }

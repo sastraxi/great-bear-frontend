@@ -5,7 +5,6 @@ interface Props {
   top: string | number,
   align?: 'left' | 'right',
   children: JSX.Element[],
-  ref?: RefObject<HTMLDivElement>,
 };
 
 const Container = styled.div`
