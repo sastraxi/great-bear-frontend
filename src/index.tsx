@@ -11,6 +11,7 @@ import { WebSocketLink } from 'apollo-link-ws';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { getMainDefinition } from 'apollo-utilities';
 import { BrowserRouter } from 'react-router-dom';
+import { StripeProvider } from 'react-stripe-elements';
 
 /*
 const wsLink = new WebSocketLink({
@@ -36,8 +37,11 @@ const apolloClient = new ApolloClient({
 
 ReactDOM.render(
   <BrowserRouter>
-    <ApolloProvider client={apolloClient}>
-      <App />
+    <ApolloProvider client={apolloClient}>        
+      {/* the "or" on the next line works around a problem in the typescript def */}
+      <StripeProvider apiKey={process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY || ""}>
+        <App />
+      </StripeProvider>
     </ApolloProvider>
   </BrowserRouter>,
   document.getElementById('root'),

@@ -2,14 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import UserMenu from './UserMenu';
 import ShoppingCartIcon from './ShoppingCartIcon';
+import Logo from '../view/Logo';
 
 const SPACE_BETWEEN = '15px';
-
-const Logo = styled.span`
-  font-weight: bold;
-  font-size: 150%;
-  letter-spacing: 5px;
-`;
 
 const Container = styled.div`
   display: flex;
@@ -26,7 +21,7 @@ const Container = styled.div`
 
 const Header = ({ }) => (
   <Container>
-    <Logo>GREAT ⭑ BEAR</Logo>
+    <Logo to="/" />
     <ShoppingCartIcon />
     <UserMenu />
   </Container>

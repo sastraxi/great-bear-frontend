@@ -18,3 +18,8 @@
 * https://www.howtographql.com/react-apollo
 * https://github.com/prisma/graphql-yoga/issues/424
 * https://github.com/apollographql/subscriptions-transport-ws/issues/466
+
+### TODO
+
+* update `great-bear-hasura` to allow login / signup via graphql,
+  so the front-end can do all requests via apollo

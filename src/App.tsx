@@ -4,7 +4,8 @@ import Wrap from './view/Wrap';
 
 import { Switch, Route } from 'react-router-dom';
 
-import Menu from './components/Menu';
+import Menu from './pages/Menu';
+import Cart from './pages/Cart';
 
 class App extends Component {
   render() {
@@ -12,6 +13,7 @@ class App extends Component {
       <Wrap>
         <Switch>
           <Route exact path="/" component={Menu} />
+          <Route exact path="/cart" component={Cart} />
         </Switch>
       </Wrap>
     );
