@@ -9,15 +9,19 @@ const IMAGE_SIZE = '80px';
 const Container = styled.div`
   display: flex;
 
-
   & + & {
     margin-top: 10px;
+  }
+
+  & > * {
+    flex-shrink: 0;
   }
 `;
 
 const Details = styled.div`
   margin: auto 10px;
   flex-grow: 1;
+  flex-shrink: 1;
 `;
 
 const Name = styled.div`
