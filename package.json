@@ -3,15 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@react-google-maps/api": "^1.0.10",
-    "@types/jest": "24.0.0",
-    "@types/node": "10.12.24",
-    "@types/react": "16.8.2",
-    "@types/react-dom": "16.8.0",
-    "@types/react-icons": "^2.2.6",
-    "@types/react-router": "^4.4.3",
-    "@types/react-router-dom": "^4.3.1",
-    "@types/styled-components": "^4.1.8",
     "apollo-boost": "^0.1.27",
     "apollo-link-ws": "^1.0.14",
     "graphql": "^14.1.1",
@@ -20,6 +11,7 @@
     "react": "^16.8.1",
     "react-apollo": "^2.4.1",
     "react-dom": "^16.8.1",
+    "react-google-maps": "^9.4.5",
     "react-icons": "^3.4.0",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
@@ -45,8 +37,17 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@types/googlemaps": "^3.30.16",
+    "@types/jest": "24.0.0",
+    "@types/node": "10.12.24",
     "@types/numeral": "^0.0.25",
     "@types/prop-types": "^15.5.8",
-    "@types/react-stripe-elements": "^1.1.10"
+    "@types/react": "16.8.2",
+    "@types/react-dom": "16.8.0",
+    "@types/react-icons": "^2.2.6",
+    "@types/react-router": "^4.4.3",
+    "@types/react-router-dom": "^4.3.1",
+    "@types/react-stripe-elements": "^1.1.10",
+    "@types/styled-components": "^4.1.8"
   }
 }
