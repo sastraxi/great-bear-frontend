@@ -14,6 +14,7 @@ const DEFAULT_DELIVERY_LOCATION = {
 };
 
 interface Props extends ReactStripeElements.InjectedStripeProps {
+  cartId: number,
   totalAmount: number,
 }
 
@@ -21,12 +22,12 @@ const CheckoutForm = (props: Props) => {
   const [center, setCenter] = useState(DEFAULT_DELIVERY_LOCATION);
 
   const handleSubmit = (ev: React.FormEvent) => {
-    const { stripe } = props;
+    const { stripe, cartId, totalAmount } = props;
     ev.preventDefault();
 
     // the following automatically finds our CardElement
-    stripe!.createToken().then(({token}) => {
-      console.log('Received Stripe token:', token);
+    stripe!.createToken().then(({ token }) => {
+      console.log(cartId, totalAmount, token!.id, center);
     });
   }
 

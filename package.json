@@ -7,6 +7,7 @@
     "apollo-link-ws": "^1.0.14",
     "graphql": "^14.1.1",
     "graphql-tag": "^2.10.1",
+    "moment": "^2.24.0",
     "numeral": "^2.0.6",
     "prop-types": "^15.7.1",
     "react": "^16.8.1",

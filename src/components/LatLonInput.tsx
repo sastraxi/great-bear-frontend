@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { LatLon } from '../util/types';
 
 import {
   withScriptjs,
@@ -10,12 +11,7 @@ import {
 const MAP_URL =
   `https://maps.googleapis.com/maps/api/js?v=3.exp&key=${process.env.REACT_APP_MAPS_API_KEY}`;
 
-interface LatLon {
-  lat: number,
-  lon: number,
-}
-
-interface LatLng {
+export interface LatLng {
   lat: number,
   lng: number,
 }

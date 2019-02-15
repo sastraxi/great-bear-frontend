@@ -2,23 +2,13 @@ import React from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
-interface Item {
-  id: number,
-  amount: number,
-  name: string,
-  description?: string,
-  imageUrl?: string,
-}
-
-interface CartItem {
-  quantity: number,
-  item: Item,
-}
+import { CartItem } from '../util/types';
 
 export interface RenderProps {
   loading: boolean,
   items?: [CartItem],
   totalQuantity?: number,
+  cartId?: number,
   subscribe?(): void,
 }
 
@@ -35,6 +25,7 @@ const SESSION_ID_QUERY = gql`
 const generateCartQuery = (type: 'query' | 'subscription') => gql`
   ${type}($sessionId: String!) {
     cart(where: { session_id: { _eq: $sessionId }}) {
+      id
       cartItemsBycartId {
         quantity
         itemByitemId {
@@ -73,7 +64,9 @@ export default ({ children: renderChild }: Props) => (
 
                 // the cart gets created on the first insert, so
                 // not having a cart can be treated as an empty cart.
-                const items = data.cart[0] ? unpackCart(data.cart[0]) : undefined;
+                const cart = data.cart[0];
+                const cartId = cart ? cart.id : undefined;
+                const items = cart ? unpackCart(cart) : undefined;
                 const totalQuantity = items
                   ? items.map(i => i.quantity).reduce((a, b) => a + b, 0)
                   : 0;
@@ -81,6 +74,7 @@ export default ({ children: renderChild }: Props) => (
                 return renderChild({
                   loading: false,
                   items,
+                  cartId,
                   totalQuantity,
                   subscribe: () =>
                     subscribeToMore({
