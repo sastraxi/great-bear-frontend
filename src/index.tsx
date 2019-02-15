@@ -13,32 +13,36 @@ import { getMainDefinition } from 'apollo-utilities';
 import { BrowserRouter } from 'react-router-dom';
 import { StripeProvider } from 'react-stripe-elements';
 
-/*
-const wsLink = new WebSocketLink({
-  uri: `ws://localhost:4000`,
-  options: {
-    reconnect: true,
-    connectionParams: {
-      authToken: localStorage.getItem(AUTH_TOKEN),
-    }
-  }
-});
-*/
-
 const httpLink = createHttpLink({
   uri: process.env.REACT_APP_GRAPHQL_URL,
   credentials: 'include',
 })
 
+const wsLink = new WebSocketLink({
+  uri: process.env.REACT_APP_SUBSCRIPTION_URL || "",
+  options: {
+    reconnect: true,
+    connectionParams: {},
+  }
+});
+
+const combinedLink = split(
+  ({ query }) => {
+    const { kind, operation } = getMainDefinition(query);
+    return kind === 'OperationDefinition' && operation === 'subscription';
+  },
+  wsLink,
+  httpLink,
+);
+
 const apolloClient = new ApolloClient({
-  link: httpLink,
+  link: combinedLink, // see https://www.apollographql.com/docs/react/advanced/subscriptions.html
   cache: new InMemoryCache(),
 })
 
 ReactDOM.render(
   <BrowserRouter>
     <ApolloProvider client={apolloClient}>        
-      {/* the "or" on the next line works around a problem in the typescript def */}
       <StripeProvider apiKey={process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY || ""}>
         <App />
       </StripeProvider>

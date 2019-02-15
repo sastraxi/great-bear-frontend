@@ -8,6 +8,13 @@ import Menu from './pages/Menu';
 import Cart from './pages/Cart';
 
 class App extends Component {
+  componentDidMount() {
+    fetch(`${process.env.REACT_APP_BACKEND_URL}`, { credentials: 'include' }).then(() => {
+      // force a call to the actual
+      // TODO: the call to login will do this for us, can remove later
+    });
+  }
+
   render() {
     return (
       <Wrap>
