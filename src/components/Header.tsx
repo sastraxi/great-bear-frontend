@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import UserMenu from './UserMenu';
-import ShoppingCartIcon from '../view/ShoppingCartIcon';
+import ShoppingCartIcon from './ShoppingCartIcon';
 import Logo from '../view/Logo';
-import CartData from '../bind/CartData';
+import CurrentCart from '../bind/CurrentCart';
 
 const SPACE_BETWEEN = '15px';
 
@@ -23,9 +23,9 @@ const Container = styled.div`
 const Header = ({ }) => (
   <Container>
     <Logo to="/" />
-    <CartData>
+    <CurrentCart>
       { props => <ShoppingCartIcon {...props} /> }
-    </CartData>      
+    </CurrentCart>      
     <UserMenu />
   </Container>
 );

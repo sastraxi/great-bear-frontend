@@ -4,7 +4,7 @@ import Divider from '../view/Divider';
 import Item from '../view/Item';
 import { Elements } from 'react-stripe-elements';
 
-import CartData from '../bind/CartData';
+import CurrentCart from '../bind/CurrentCart';
 import CheckoutForm from '../components/CheckoutForm';
 import SetCartQuantity from '../bind/SetCartQuantity';
 
@@ -12,7 +12,7 @@ const Cart = ({ }) => (
   <SetCartQuantity>
     {
       ({ setCartQuantity, loading: mutating }) => (
-        <CartData>
+        <CurrentCart>
           {
             ({ items, cartId, loading }) => {
               if (loading) {
@@ -52,7 +52,7 @@ const Cart = ({ }) => (
               );
             }
           }
-        </CartData>
+        </CurrentCart>
       )
     }
   </SetCartQuantity>    

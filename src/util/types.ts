@@ -35,3 +35,14 @@ export interface Order {
   cookedAt: Moment | null,
   deliveredAt: Moment | null
 };
+
+export interface Geometry {
+  type: 'Point',
+  coordinates: [number, number],
+  crs: {
+    type: 'name',
+    properties: {
+      name: string,
+    },
+  },
+}

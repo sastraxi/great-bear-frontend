@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { IoIosCart } from 'react-icons/io';
 import { Link } from 'react-router-dom';
 
-import { RenderProps as Props } from '../bind/CartData';
+import { RenderProps as Props } from '../bind/CurrentCart';
 
 const Icon = styled(IoIosCart)`
   width: 20px;
