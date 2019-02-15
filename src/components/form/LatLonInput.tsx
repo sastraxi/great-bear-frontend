@@ -33,7 +33,7 @@ interface MapProps {
   onZoomChanged(zoom: number): any,
 }
 
-const Map = ({
+const MapComponent = ({
   zoom,
   onZoomChanged,
   center,
@@ -55,31 +55,20 @@ const Map = ({
     onZoomChanged(newZoom);
   }
 
-  const MyGoogleMap = withScriptjs(
-    withGoogleMap(() => (
-      <GoogleMap
-        ref={mapRef}
+  return (
+    <GoogleMap
+      ref={mapRef}
 
-        zoom={zoom}
-        onZoomChanged={updateZoom}
+      zoom={zoom}
+      onZoomChanged={updateZoom}
 
-        center={toLng(center)}
-        onCenterChanged={updateCenter}
-      />
-    )));
-
-  const loadingElement = <div/>
-  const containerElement = <div style={{height: "200px"}}/>
-  const mapElement = <div style={{height: "200px"}}/>
-  const map = <MyGoogleMap
-    loadingElement={loadingElement}
-    containerElement={containerElement}
-    googleMapURL={MAP_URL}
-    mapElement={mapElement}
-  />
-
-  return map;
+      center={toLng(center)}
+      onCenterChanged={updateCenter}
+    />
+  );
 };
+
+const Map = withScriptjs(withGoogleMap(MapComponent));
 
 interface Props {
   value?: LatLon,
@@ -98,9 +87,18 @@ const LatLonInput = ({
 }: Props) => {
   const [zoom, setZoom] = useState(defaultZoom);
 
+
+  const loadingElement = <div/>
+  const containerElement = <div style={{height: "200px"}}/>
+  const mapElement = <div style={{height: "200px"}}/>
+  
   return (
     <div>
       <Map
+        loadingElement={loadingElement}
+        containerElement={containerElement}
+        googleMapURL={MAP_URL}
+        mapElement={mapElement}
         zoom={zoom}
         onZoomChanged={setZoom}
         center={value || defaultValue}
