@@ -11,3 +11,5 @@ export const formatCents = (amount: number) => {
 
 export const getIsoCurrency = () => CURRENCY || 'cad';
 
+export const formatCurrency = (amount: number) =>
+  `${formatCents(amount)} ${getIsoCurrency().toUpperCase()}`;

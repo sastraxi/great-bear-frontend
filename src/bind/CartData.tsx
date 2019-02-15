@@ -12,7 +12,7 @@ interface Item {
 
 interface CartItem {
   quantity: number,
-  item: [Item],
+  item: Item,
 }
 
 export interface RenderProps {
@@ -75,7 +75,7 @@ export default ({ children: renderChild }: Props) => (
                 // not having a cart can be treated as an empty cart.
                 const items = data.cart[0] ? unpackCart(data.cart[0]) : undefined;
                 const totalQuantity = items
-                  ? items.map(i => i.quantity).reduce((a, b) => a + b)
+                  ? items.map(i => i.quantity).reduce((a, b) => a + b, 0)
                   : 0;
 
                 return renderChild({

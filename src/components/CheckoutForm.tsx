@@ -4,14 +4,20 @@ import {
   CardElement,
   ReactStripeElements,
 } from 'react-stripe-elements';
+
 import LatLonInput from './LatLonInput';
+import { formatCurrency } from '../util/currency';
 
 const DEFAULT_DELIVERY_LOCATION = {
   lat: 43.761539,
   lon: -79.411079,
 };
 
-const CheckoutForm = (props: ReactStripeElements.InjectedStripeProps) => {
+interface Props extends ReactStripeElements.InjectedStripeProps {
+  totalAmount: number,
+}
+
+const CheckoutForm = (props: Props) => {
   const [center, setCenter] = useState(DEFAULT_DELIVERY_LOCATION);
 
   const handleSubmit = (ev: React.FormEvent) => {
@@ -26,6 +32,9 @@ const CheckoutForm = (props: ReactStripeElements.InjectedStripeProps) => {
 
   return (
     <form onSubmit={handleSubmit}>
+      <span>
+        Order total: {formatCurrency(props.totalAmount)}
+      </span>
       <CardElement style={{base: {fontSize: '18px'}}} />
       { center.lat } x { center.lon }
       <LatLonInput

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import ItemImage from './ItemImage';
 
-import { formatCents, getIsoCurrency } from '../util/currency';
+import { formatCurrency } from '../util/currency';
 
 const IMAGE_SIZE = '80px';
 
@@ -45,7 +45,7 @@ const Quantity = styled.div`
 interface Props {
   imageUrl?: string,
   name: string,
-  description: string,
+  description?: string,
   price: number,
   quantity?: number,
   onAddToCart?(): void,
@@ -66,8 +66,8 @@ class Item extends Component<Props> {
         <ItemImage src={imageUrl} size={IMAGE_SIZE} />
         <Details>
           <Name>{ name }</Name>
-          <Description>{ description}</Description>
-          <Price>{ formatCents(price) } { getIsoCurrency().toUpperCase() }</Price>
+          <Description>{ description || <i>This item has no description</i> }</Description>
+          <Price>{ formatCurrency(price) }</Price>
         </Details>
         { quantity && <Quantity>{ quantity }</Quantity> }
         { onQuantityUp && <button onClick={onQuantityUp}>+1</button> }
