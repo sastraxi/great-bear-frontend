@@ -59,7 +59,7 @@ const Failed = styled.span`
 `;
 
 const TimeIcon = styled(IoMdTime)`
-  font-size: 130%;
+  font-size: 140%;
 `;
 
 export default ({ orders }: Props) => (

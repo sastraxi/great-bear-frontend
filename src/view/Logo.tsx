@@ -14,15 +14,14 @@ const LogoWrap = styled.span`
 `;
 
 export default (props: Props) => {
+  const innerLogo = (<LogoWrap>GREAT ⭑ BEAR</LogoWrap>);
   if (props.to) {
     return (
       <Link to={props.to}>
-        <LogoWrap>GREAT ⭑ BEAR</LogoWrap>
+        { innerLogo }
       </Link>
     );
   }
-  return (
-    <LogoWrap>GREAT ⭑ BEAR</LogoWrap>
-  );
+  return innerLogo;
 };
 

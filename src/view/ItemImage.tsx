@@ -1,4 +1,4 @@
-import React, { RefObject } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { IoIosCamera } from 'react-icons/io';
 
