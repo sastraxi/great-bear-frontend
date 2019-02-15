@@ -19,7 +19,7 @@ interface Props {
 
 const generateOrdersQuery = (type: 'query' | 'subscription') => gql`
   ${type} {
-    order {
+    order(order_by: { id: desc }) {
       id
       amount
       latlon
@@ -59,7 +59,7 @@ export default ({
         if (loading) return renderChild({ loading });
         if (error) return renderChild({ loading: false, error });
 
-        const orders = data.orders ? data.orders.map(unpackOrder) : undefined;
+        const orders = data.order ? data.order.map(unpackOrder) : undefined;
 
         return renderChild({
           loading: false,

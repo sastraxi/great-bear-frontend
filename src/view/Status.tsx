@@ -26,13 +26,15 @@ const Value = styled.div`
 
 const Spinner = styled(Value)``;
 
+type Renderable = JSX.Element | moment.Moment | string | number;
+
 interface Props {
-  label: string,
-  value?: moment.Moment | string | number,
+  label: JSX.Element | string,
+  value?: Renderable,
   loading?: boolean,
 }
 
-const display = (value?: moment.Moment | string | number): JSX.Element => {
+const display = (value?: Renderable): JSX.Element => {
   if (!value) return <Value />;
   if (moment.isMoment(value)) {
     return (

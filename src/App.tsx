@@ -6,6 +6,7 @@ import { Switch, Route, match } from 'react-router-dom';
 import Menu from './pages/Menu';
 import Cart from './pages/Cart';
 import Order from './pages/Order';
+import Orders from './pages/Orders';
 
 class App extends Component {
   componentDidMount() {
@@ -21,9 +22,10 @@ class App extends Component {
         <Switch>
           <Route exact path="/" component={Menu} />
           <Route exact path="/cart" component={Cart} />
+          <Route exact path="/orders" component={Orders} />
           <Route
             exact
-            path="/order/:id"
+            path="/orders/:id"
             render={({ match }) => <Order orderId={+match.params.id} />}
           />
         </Switch>

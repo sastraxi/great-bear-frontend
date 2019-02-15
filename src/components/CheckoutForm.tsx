@@ -48,7 +48,7 @@ const CheckoutForm = (props: Props) => {
   };
 
   if (orderId) {
-    return <Redirect to={`/order/${orderId}`} />;
+    return <Redirect to={`/orders/${orderId}`} />;
   }
 
   return (
