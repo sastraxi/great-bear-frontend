@@ -4,7 +4,7 @@ import {
   CardElement,
   ReactStripeElements,
 } from 'react-stripe-elements';
-import LatLonInput from './form/LatLonInput';
+import LatLonInput from './LatLonInput';
 
 const DEFAULT_DELIVERY_LOCATION = {
   lat: 43.761539,
@@ -27,13 +27,11 @@ const CheckoutForm = (props: ReactStripeElements.InjectedStripeProps) => {
   return (
     <form onSubmit={handleSubmit}>
       <CardElement style={{base: {fontSize: '18px'}}} />
+      { center.lat } x { center.lon }
       <LatLonInput
         value={center}
         defaultZoom={13}
-        onChange={(...args) => {
-          console.log(args),
-          setCenter(...args);
-        }}
+        onChange={setCenter}
         showMapButton={false}
       />
       <button>Place order</button>

@@ -1,6 +1,11 @@
 import React, { useState, useRef } from 'react';
 
-import { withScriptjs, withGoogleMap, GoogleMap } from 'react-google-maps';
+import {
+  withScriptjs,
+  withGoogleMap,
+  GoogleMap,
+  Marker,
+} from 'react-google-maps';
 
 const MAP_URL =
   `https://maps.googleapis.com/maps/api/js?v=3.exp&key=${process.env.REACT_APP_MAPS_API_KEY}`;
@@ -64,7 +69,19 @@ const MapComponent = ({
 
       center={toLng(center)}
       onCenterChanged={updateCenter}
-    />
+
+      defaultOptions={{
+        streetViewControl: false,
+        scaleControl: false,
+        mapTypeControl: false,
+        panControl: true,
+        zoomControl: true,
+        rotateControl: false,
+        fullscreenControl: false
+      }}      
+    >
+      <Marker position={toLng(center)} />
+    </GoogleMap>
   );
 };
 
