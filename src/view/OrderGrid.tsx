@@ -85,7 +85,7 @@ export default ({ orders }: Props) => (
           order.createdAt,
         );
         return (
-          <Card>
+          <Card key={order.id}>
             <BigNumber>
               <Link to={`/orders/${order.id}`}>#{order.id}</Link>
             </BigNumber>
