@@ -4,9 +4,11 @@ import gql from 'graphql-tag';
 import { Order } from '../util/types';
 
 import { unpackOrder } from './transformers';
+import { ApolloError } from 'apollo-client';
 
 export interface RenderProps {
   loading: boolean,
+  error?: ApolloError,
   orders?: [Order],
   subscribe?(): void,
 }
@@ -16,12 +18,22 @@ interface Props {
 }
 
 const generateOrdersQuery = (type: 'query' | 'subscription') => gql`
-  ${type}($orderId: String!) {
+  ${type} {
     order {
       id
       amount
-      created_at
+      latlon
+
       error
+      failed_at
+
+      created_at
+      authorized_at
+      verified_at
+      captured_at
+      cooked_at
+      delivered_at
+
       orderItemsByorderId {
         quantity
         itemByitemId {
@@ -43,8 +55,9 @@ export default ({
 }: Props) => (
   <Query query={ORDERS_QUERY}>
     {
-      ({ subscribeToMore, loading, data }) => {
+      ({ subscribeToMore, loading, data, error }) => {
         if (loading) return renderChild({ loading });
+        if (error) return renderChild({ loading: false, error });
 
         const orders = data.orders ? data.orders.map(unpackOrder) : undefined;
 

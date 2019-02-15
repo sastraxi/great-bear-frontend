@@ -3,9 +3,11 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
 import { CartItem } from '../util/types';
+import { ApolloError } from 'apollo-client';
 
 export interface RenderProps {
   loading: boolean,
+  error?: ApolloError,
   items?: [CartItem],
   totalQuantity?: number,
   cartId?: number,
@@ -53,14 +55,16 @@ const CART_SUBSCRIPTION = generateCartQuery('subscription');
 export default ({ children: renderChild }: Props) => (
   <Query query={SESSION_ID_QUERY}>
     {
-      ({ loading, data }) => {
+      ({ loading, data, error }) => {
         if (loading) return renderChild({ loading });
+        if (error) return renderChild({ loading: false, error });
         const { sessionId } = data;
         return (
           <Query query={CART_QUERY} variables={{ sessionId }}>
             {
-              ({ subscribeToMore, loading, data }) => {
+              ({ subscribeToMore, loading, data, error }) => {
                 if (loading) return renderChild({ loading });
+                if (error) return renderChild({ loading: false, error });
 
                 // the cart gets created on the first insert, so
                 // not having a cart can be treated as an empty cart.

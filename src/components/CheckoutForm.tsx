@@ -67,7 +67,7 @@ const CheckoutForm = (props: Props) => {
               onChange={setCenter}
               showMapButton={false}
             />
-            <button disabled={loading}>
+            <button disabled={loading || !props.totalAmount}>
               Place order
             </button>
           </form>  

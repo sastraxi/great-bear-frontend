@@ -20,20 +20,25 @@ export interface CartItem {
 
 export interface OrderItem extends CartItem { }
 
+export interface WithMessage {
+  message?: string,
+}
+
 export interface Order {
+  id: number,
   items: [OrderItem],
   amount: number,
   latlon: LatLon,
 
-  error?: Object,
-  failedAt: Moment | null,
+  error?: WithMessage,
+  failedAt?: Moment,
 
   createdAt: Moment,
-  authorizedAt: Moment | null,
-  verifiedAt: Moment | null,
-  capturedAt: Moment | null,
-  cookedAt: Moment | null,
-  deliveredAt: Moment | null
+  authorizedAt?: Moment,
+  verifiedAt?: Moment,
+  capturedAt?: Moment,
+  cookedAt?: Moment,
+  deliveredAt?: Moment,
 };
 
 export interface Geometry {

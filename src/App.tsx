@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import './App.css';
 import Wrap from './view/Wrap';
 
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, match } from 'react-router-dom';
 
 import Menu from './pages/Menu';
 import Cart from './pages/Cart';
+import Order from './pages/Order';
 
 class App extends Component {
   componentDidMount() {
@@ -21,6 +21,11 @@ class App extends Component {
         <Switch>
           <Route exact path="/" component={Menu} />
           <Route exact path="/cart" component={Cart} />
+          <Route
+            exact
+            path="/order/:id"
+            render={({ match }) => <Order orderId={+match.params.id} />}
+          />
         </Switch>
       </Wrap>
     );
