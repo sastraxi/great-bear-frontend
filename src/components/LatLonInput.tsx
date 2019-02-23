@@ -1,30 +1,27 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
+import styled from 'styled-components';
+// @ts-ignore
+import Map from 'pigeon-maps';
+// @ts-ignore
+import Marker from 'pigeon-marker';
+import isEqual from 'lodash/isEqual';
+
 import { LatLon } from '../util/types';
 
-import {
-  withScriptjs,
-  withGoogleMap,
-  GoogleMap,
-  Marker,
-} from 'react-google-maps';
+type ArrayCoord = [number, number];
 
-const MAP_URL =
-  `https://maps.googleapis.com/maps/api/js?v=3.exp&key=${process.env.REACT_APP_MAPS_API_KEY}`;
+const toArray = (inp: LatLon): ArrayCoord =>
+  (!inp ? inp : [inp.lat, inp.lon]);
 
-export interface LatLng {
-  lat: number,
-  lng: number,
-}
-
-const toLng = (inp: LatLon): LatLng => (!inp ? inp : {
-  lat: inp.lat,
-  lng: inp.lon,
-});
-
-const toLon = ({ lat, lng }: LatLng): LatLon => ({
+const toLatLon = ([ lat, lon ]: ArrayCoord): LatLon => ({
   lat,
-  lon: lng,
+  lon,
 });
+
+interface BoundsChangedEvent {
+  center: ArrayCoord,
+  zoom: number,
+};
 
 interface MapProps {
   center: LatLon,
@@ -40,48 +37,27 @@ const MapComponent = ({
   center,
   onCenterChanged,
 }: MapProps) => {
-  const mapRef = useRef<GoogleMap>(null);
+  const arrayCenter = toArray(center);
 
-  const updateCenter = () => {
-    const { lat, lng } = mapRef.current!.getCenter();
-    onCenterChanged({
-      lat: lat(),
-      lon: lng(),
-    });
+  const sendUpdates = ({ center: newCenter, zoom: newZoom }: BoundsChangedEvent) => {
+    if (!isEqual(newCenter, arrayCenter)) {
+      onCenterChanged(toLatLon(newCenter));
+    }
+    if (zoom !== newZoom) {
+      onZoomChanged(newZoom);
+    }
   };
 
-  const updateZoom = () => {
-    const newZoom = mapRef.current!.getZoom();
-    console.log('zoom is', newZoom);
-    onZoomChanged(newZoom);
-  }
-
   return (
-    <GoogleMap
-      ref={mapRef}
-
+    <Map
+      center={arrayCenter}
+      onBoundsChanged={sendUpdates}
       zoom={zoom}
-      onZoomChanged={updateZoom}
-
-      center={toLng(center)}
-      onCenterChanged={updateCenter}
-
-      defaultOptions={{
-        streetViewControl: false,
-        scaleControl: false,
-        mapTypeControl: false,
-        panControl: true,
-        zoomControl: true,
-        rotateControl: false,
-        fullscreenControl: false
-      }}      
     >
-      <Marker position={toLng(center)} />
-    </GoogleMap>
+      <Marker position={arrayCenter} />
+    </Map>
   );
 };
-
-const Map = withScriptjs(withGoogleMap(MapComponent));
 
 interface Props {
   value?: LatLon,
@@ -92,6 +68,10 @@ interface Props {
   defaultZoom: number,
 }
 
+const Container = styled.div`
+  height: 200px;
+`;
+
 const LatLonInput = ({
   value, defaultValue,
   defaultZoom,
@@ -99,26 +79,16 @@ const LatLonInput = ({
   showMapButton,
 }: Props) => {
   const [zoom, setZoom] = useState(defaultZoom);
-
-
-  const loadingElement = <div/>
-  const containerElement = <div style={{height: "200px"}}/>
-  const mapElement = <div style={{height: "200px"}}/>
-  
   return (
-    <div>
-      <Map
-        loadingElement={loadingElement}
-        containerElement={containerElement}
-        googleMapURL={MAP_URL}
-        mapElement={mapElement}
+    <Container>
+      <MapComponent
         zoom={zoom}
         onZoomChanged={setZoom}
         center={value || defaultValue}
         onCenterChanged={onChange}
       />
-    </div>
-  )
+    </Container>
+  );
 };
 
 LatLonInput.defaultProps = {
