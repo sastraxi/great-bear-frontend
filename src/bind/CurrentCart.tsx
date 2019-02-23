@@ -18,17 +18,11 @@ interface Props {
   children(props: RenderProps): JSX.Element,
 }
 
-const SESSION_ID_QUERY = gql`
-  query {
-    sessionId
-  }
-`;
-
 const generateCartQuery = (type: 'query' | 'subscription') => gql`
-  ${type}($sessionId: String!) {
-    cart(where: { session_id: { _eq: $sessionId }}) {
+  ${type} {
+    current_cart {
       id
-      cartItemsBycartId {
+      cartItemsByCartId {
         quantity
         itemByitemId {
           id
@@ -42,7 +36,7 @@ const generateCartQuery = (type: 'query' | 'subscription') => gql`
 `;
 
 const unpackCart = (cart: any): [CartItem]=> {
-  const { cartItemsBycartId: items } = cart;
+  const { cartItemsByCartId: items } = cart;
   return items.map(({ quantity, itemByitemId }: any) => ({
     quantity,
     item: itemByitemId,
@@ -53,47 +47,36 @@ const CART_QUERY = generateCartQuery('query');
 const CART_SUBSCRIPTION = generateCartQuery('subscription');
 
 export default ({ children: renderChild }: Props) => (
-  <Query query={SESSION_ID_QUERY}>
+  <Query query={CART_QUERY}>
     {
-      ({ loading, data, error }) => {
+      ({ subscribeToMore, loading, data, error }) => {
         if (loading) return renderChild({ loading });
         if (error) return renderChild({ loading: false, error });
-        const { sessionId } = data;
-        return (
-          <Query query={CART_QUERY} variables={{ sessionId }}>
-            {
-              ({ subscribeToMore, loading, data, error }) => {
-                if (loading) return renderChild({ loading });
-                if (error) return renderChild({ loading: false, error });
 
-                // the cart gets created on the first insert, so
-                // not having a cart can be treated as an empty cart.
-                const cart = data.cart[0];
-                const cartId = cart ? cart.id : undefined;
-                const items = cart ? unpackCart(cart) : undefined;
-                const totalQuantity = items
-                  ? items.map(i => i.quantity).reduce((a, b) => a + b, 0)
-                  : 0;
+        // the cart gets created on the first insert, so
+        // not having a cart can be treated as an empty cart.
+        const cart = data.current_cart[0];
+        const cartId = cart ? cart.id : undefined;
+        const items = cart ? unpackCart(cart) : undefined;
+        const totalQuantity = items
+          ? items.map(i => i.quantity).reduce((a, b) => a + b, 0)
+          : 0;
 
-                return renderChild({
-                  loading: false,
-                  items,
-                  cartId,
-                  totalQuantity,
-                  subscribe: () =>
-                    subscribeToMore({
-                      document: CART_SUBSCRIPTION,
-                      variables: { sessionId },
-                      updateQuery: (prev, { subscriptionData }) => {
-                        // our subscription has the same shape as our query
-                        return subscriptionData.data || prev;
-                      },
-                    }),
-                });
-              }
-            }
-          </Query>
-        )
+        return renderChild({
+          loading: false,
+          items,
+          cartId,
+          totalQuantity,
+          subscribe: () =>
+            subscribeToMore({
+              document: CART_SUBSCRIPTION,
+              updateQuery: (prev, { subscriptionData }) => {
+                // our subscription has the same shape as our query
+                console.log(subscriptionData);
+                return subscriptionData.data || prev;
+              },
+            }),
+        });
       }
     }
   </Query>
