@@ -54,7 +54,7 @@ const MapComponent = ({
       onBoundsChanged={sendUpdates}
       zoom={zoom}
     >
-      <Marker position={arrayCenter} />
+      <Marker anchor={arrayCenter} />
     </Map>
   );
 };
