@@ -21,8 +21,5 @@
 
 ### TODO
 
-* update `great-bear-hasura` to allow login / signup via graphql,
-  so the front-end can do all requests via apollo
-   -> can we set cookies from a "hasura -> remote schema" endpoint?
 * use `current_cart` rather than getting session ID then loading that cart
 * create a `current_user` view too
