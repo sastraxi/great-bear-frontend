@@ -1,6 +1,10 @@
 import gql from 'graphql-tag';
-import { Cart, Order } from '../../util/types';
+import { Cart, Order, LatLon } from '../../util/types';
 import toMoment from '../../util/to-moment';
+
+export const packLatLon = (coord: LatLon) => coord;
+
+/* ***************************** */
 
 const currentCartSubscription = gql`
   subscription {
@@ -11,9 +15,11 @@ const currentCartSubscription = gql`
           quantity
           item {
             id
+            name            
             amount
-            name
+            category
             description
+            imageUrl
           }
         }
       }
@@ -29,9 +35,11 @@ const currentCartQuery = gql`
         quantity
         item {
           id
+          name            
           amount
-          name
+          category
           description
+          imageUrl
         }
       }
     }
@@ -51,7 +59,6 @@ export const unpackCart = (data: any): Cart | null => {
 };
 
 export const cartSubscriptionUntransform = (data: any) => {
-  console.log(data);
   return {
     currentCart: data.currentCart.cart,
   }
@@ -60,7 +67,7 @@ export const cartSubscriptionUntransform = (data: any) => {
 /* ***************************** */
 
 export const createOrderMutation = gql`
-  mutation($amount: Int!, $stripeToken: String!, $latlon: geometry!) {
+  mutation($amount: Int!, $stripeToken: String!, $latlon: LatLon!) {
     checkout(
       deliveryLocation: $latlon,
       stripeToken: $stripeToken,
@@ -76,7 +83,7 @@ export const unpackOrderId = (data: any) =>
 
 const orderQuery = gql`
   query($orderId: Int!) {
-    order(id: $orderId) {
+    orderById(id: $orderId) {
       id
       amount
       currentJson
@@ -108,7 +115,7 @@ const orderQuery = gql`
 
 const orderSubscription = gql`
   subscription($orderId: Int!) {
-    order(id: $orderId) {
+    orderById(id: $orderId) {
       order {
         id
         amount
@@ -143,10 +150,12 @@ const orderSubscription = gql`
 export const generateOrderQuery = (type: 'query' | 'subscription') =>
   (type === 'query' ? orderQuery : orderSubscription);
 
-export const unpackOrder = (order: any): Order => {
+export const unpackOrder = (data: any): Order | null => {
+  const { orderById: order } = data;
+  if (!order) return null;
   return {
     id: order.id,
-    items: order.items,
+    items: order.orderItemsList,
     amount: order.amount,
 
     destination: order.destinationJson && {
@@ -171,7 +180,9 @@ export const unpackOrder = (order: any): Order => {
   };
 };
 
-export const orderSubscriptionUntransform = (data: any) => data.order;
+export const orderSubscriptionUntransform = (data: any) => ({
+  orderById: data.orderById.order,
+});
 
 /* ***************************** */
   
@@ -213,7 +224,18 @@ export const generateOrdersQuery = (type: 'query' | 'subscription') =>
   (type === 'query' ? ordersQuery : ordersSubscription);
 
 export const unpackOrders = (data: any) =>
-  data.ordersList.map(unpackOrder);
+  data.ordersList.map((order: any) => ({
+    id: order.id,
+    amount: order.amount,
+
+    failedAt: toMoment(order.failedAt),
+    createdAt: toMoment(order.createdAt)!,
+    authorizedAt: toMoment(order.createdAt)!, // create + auth in one step
+    verifiedAt: toMoment(order.verifiedAt),
+    capturedAt: toMoment(order.capturedAt),
+    cookedAt: toMoment(order.cookedAt),
+    deliveredAt: toMoment(order.deliveredAt),
+  }));
 
 const idCompareDescending = (a: any, b:any) => b.id - a.id;
 

@@ -33,7 +33,7 @@ export default ({ orderId, children: renderChild }: Props) => (
         if (loading) return renderChild({ loading });
         if (error) return renderChild({ loading: false, error });
 
-        const order = data.order[0] ? unpackOrder(data.order[0]) : undefined;
+        const order = unpackOrder(data);
 
         return renderChild({
           loading: false,

@@ -31,9 +31,7 @@ const Cart = ({ }) => (
                     cart && cart.items.map(({ item, quantity }) => (
                       <Item
                         key={item.id}
-                        amount={item.amount}
-                        name={item.name}
-                        description={item.description}
+                        {...item}
                         quantity={quantity}
                         onQuantityUp={() => setCartQuantity(item.id, quantity + 1)}
                         onQuantityDown={() => setCartQuantity(item.id, quantity - 1)}
@@ -41,10 +39,13 @@ const Cart = ({ }) => (
                       />
                     ))
                   }
+                  { !cart || cart.items.length === 0 &&
+                    "Your cart is currently empty."
+                  }
                   <Divider />
                   <Elements>
                     <CheckoutForm
-                      cartId={cart!.id}
+                      cartId={cart && cart.id}
                       totalAmount={totalAmount}
                     />
                   </Elements>

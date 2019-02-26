@@ -23,6 +23,7 @@ interface Props {
 const {
   createOrderMutation,
   unpackOrderId,
+  packLatLon,
 } = currentVariant;
 
 export default ({ children: renderChild }: Props) => (
@@ -35,7 +36,7 @@ export default ({ children: renderChild }: Props) => (
               cartId,
               amount,
               stripeToken,
-              latlon: toGeometry(latlon),
+              latlon: packLatLon(latlon),
             }}).then(
               ({ data }: any) => {
                 console.log('createOrder mutation returned', data);

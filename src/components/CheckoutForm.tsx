@@ -17,7 +17,9 @@ const DEFAULT_DELIVERY_LOCATION = {
 };
 
 interface Props extends ReactStripeElements.InjectedStripeProps {
-  cartId: number,
+  // FIXME: cart ID gets removed when order updates,
+  // but we need to redirect before unmount
+  cartId?: number,
   totalAmount: number,
 }
 
@@ -36,11 +38,12 @@ const CheckoutForm = (props: Props) => {
     try {
       console.log(cartId, totalAmount, token!.id, center);
       const orderId = await createOrder(
-        cartId,
+        cartId!,
         totalAmount,
         token!.id,
         center,
       );
+      console.log('order id', orderId);
       setOrderId(orderId);
     } catch (err) {
       console.error('could not create order', err);
@@ -67,7 +70,7 @@ const CheckoutForm = (props: Props) => {
               onChange={setCenter}
               showMapButton={false}
             />
-            <button disabled={loading || !props.totalAmount}>
+            <button disabled={loading || !props.totalAmount || !props.cartId}>
               Place order
             </button>
           </form>  

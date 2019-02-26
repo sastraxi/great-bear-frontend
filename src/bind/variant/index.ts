@@ -1,8 +1,16 @@
 import * as postgraphile from './postgraphile';
 import * as hasura from './hasura';
-import { Cart, Order, Item } from '../../util/types';
+import { Cart, Order, Item, LatLon } from '../../util/types';
 
+/**
+ * pack*: serialize data
+ * unpack*: deserialize data
+ * *subscriptionUntransform:
+ *    make response from subscription look like response from query
+ */
 interface Variant {
+  packLatLon: (coord: LatLon) => any
+
   generateCartQuery: (type: 'query' | 'subscription') => any
   unpackCart: (data: any) => Cart | null
   cartSubscriptionUntransform: (data: any) => any

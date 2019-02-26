@@ -1,6 +1,9 @@
 import gql from 'graphql-tag';
-import { Cart, Order } from '../../util/types';
+import { Cart, Order, LatLon } from '../../util/types';
 import toMoment from '../../util/to-moment';
+import toGeometry from '../../util/to-geometry';
+
+export const packLatLon = (coord: LatLon) => toGeometry(coord);
 
 export const generateCartQuery = (type: 'query' | 'subscription') => gql`
   ${type} {
@@ -116,7 +119,9 @@ export const generateOrderQuery = (type: 'query' | 'subscription') => gql`
   } 
 `;
 
-export const unpackOrder = (order: any): Order => {
+export const unpackOrder = (data: any): Order | null => {
+  if (!data.order[0]) return null;
+  const order = data.order[0];
   const { orderItemsByorderId: items } = order;
   return {
     id: order.id,
