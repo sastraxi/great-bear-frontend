@@ -16,37 +16,11 @@ interface Props {
   children(props: RenderProps): JSX.Element,
 }
 
-const { unpackOrder } = currentVariant;
-
-const generateOrdersQuery = (type: 'query' | 'subscription') => gql`
-  ${type} {
-    order(order_by: { id: desc }) {
-      id
-      amount
-      latlon
-
-      error
-      failed_at
-
-      created_at
-      authorized_at
-      verified_at
-      captured_at
-      cooked_at
-      delivered_at
-
-      orderItemsByorderId {
-        quantity
-        itemByitemId {
-          id
-          amount
-          name
-          description
-        }   
-      }
-    }
-  } 
-`;
+const {
+  generateOrdersQuery,
+  unpackOrders,
+  ordersSubscriptionUntransform,
+} = currentVariant;
 
 const ORDERS_QUERY = generateOrdersQuery('query');
 const ORDERS_SUBSCRIPTION = generateOrdersQuery('subscription');
@@ -60,17 +34,18 @@ export default ({
         if (loading) return renderChild({ loading });
         if (error) return renderChild({ loading: false, error });
 
-        const orders = data.order ? data.order.map(unpackOrder) : undefined;
+        const orders = unpackOrders(data);
 
         return renderChild({
           loading: false,
-          orders,
+          orders: orders || undefined,
           subscribe: () =>
             subscribeToMore({
               document: ORDERS_SUBSCRIPTION,
               updateQuery: (prev, { subscriptionData }) => {
-                // our subscription has the same shape as our query
-                return subscriptionData.data || prev;
+                return subscriptionData.data
+                  ? ordersSubscriptionUntransform(subscriptionData.data)
+                  : prev;
               },
             }),
         });

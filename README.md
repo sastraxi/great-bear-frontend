@@ -21,5 +21,5 @@
 
 ### TODO
 
-* use `current_cart` rather than getting session ID then loading that cart
-* create a `current_user` view too
+* create a `current_user` view (hasura)
+* split up variant code into folders and add mutations

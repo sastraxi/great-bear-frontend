@@ -1,5 +1,4 @@
 import { ApolloError } from 'apollo-client';
-import gql from 'graphql-tag';
 import React from 'react';
 import { Query } from 'react-apollo';
 import { Order } from '../util/types';
@@ -17,37 +16,11 @@ interface Props {
   children(props: RenderProps): JSX.Element,
 }
 
-const { unpackOrder } = currentVariant;
-
-const generateOrderQuery = (type: 'query' | 'subscription') => gql`
-  ${type}($orderId: Int!) {
-    order(where: { id: { _eq: $orderId }}) {
-      id
-      amount
-      latlon
-
-      error
-      failed_at
-
-      created_at
-      authorized_at
-      verified_at
-      captured_at
-      cooked_at
-      delivered_at
-
-      orderItemsByorderId {
-        quantity
-        itemByitemId {
-          id
-          amount
-          name
-          description
-        }   
-      }
-    }
-  } 
-`;
+const {
+  generateOrderQuery,
+  unpackOrder,
+  orderSubscriptionUntransform,
+} = currentVariant;
 
 const ORDER_QUERY = generateOrderQuery('query');
 const ORDER_SUBSCRIPTION = generateOrderQuery('subscription');
@@ -70,8 +43,9 @@ export default ({ orderId, children: renderChild }: Props) => (
               document: ORDER_SUBSCRIPTION,
               variables: { orderId },
               updateQuery: (prev, { subscriptionData }) => {
-                // our subscription has the same shape as our query
-                return subscriptionData.data || prev;
+                return subscriptionData.data
+                  ? orderSubscriptionUntransform(subscriptionData.data)
+                  : prev;
               },
             }),
         });

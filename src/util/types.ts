@@ -34,7 +34,9 @@ export interface Order {
   id: number
   items: [OrderItem]
   amount: number
-  latlon: LatLon
+
+  destination?: LatLon
+  current?: LatLon
 
   error?: WithMessage
   failedAt?: Moment

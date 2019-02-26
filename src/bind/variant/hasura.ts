@@ -33,6 +33,88 @@ export const unpackCart = (data: any): Cart | null => {
 };
 
 export const cartSubscriptionUntransform = (data: any) => data;
+export const ordersSubscriptionUntransform = (data: any) => data;
+export const orderSubscriptionUntransform = (data: any) => data;
+
+export const createOrderMutation = gql`
+  mutation($cartId: Int!, $amount: Int!, $stripeToken: String!, $latlon: geometry!) {
+    insert_order(objects: [
+      {
+        cart_id: $cartId,
+        amount: $amount,
+        stripe_token: $stripeToken,
+        latlon: $latlon
+      }
+    ]) {
+      returning {
+        id
+      }
+    }
+  }
+`;
+
+export const unpackOrderId = (data: any) =>
+  data.insert_order.returning[0].id;
+
+export const generateOrdersQuery = (type: 'query' | 'subscription') => gql`
+  ${type} {
+    order(order_by: { id: desc }) {
+      id
+      amount
+      latlon
+
+      error
+      failed_at
+
+      created_at
+      authorized_at
+      verified_at
+      captured_at
+      cooked_at
+      delivered_at
+
+      orderItemsByorderId {
+        quantity
+        itemByitemId {
+          id
+          amount
+          name
+          description
+        }   
+      }
+    }
+  } 
+`;
+
+export const generateOrderQuery = (type: 'query' | 'subscription') => gql`
+  ${type}($orderId: Int!) {
+    order(where: { id: { _eq: $orderId }}) {
+      id
+      amount
+      latlon
+
+      error
+      failed_at
+
+      created_at
+      authorized_at
+      verified_at
+      captured_at
+      cooked_at
+      delivered_at
+
+      orderItemsByorderId {
+        quantity
+        itemByitemId {
+          id
+          amount
+          name
+          description
+        }   
+      }
+    }
+  } 
+`;
 
 export const unpackOrder = (order: any): Order => {
   const { orderItemsByorderId: items } = order;
@@ -43,9 +125,14 @@ export const unpackOrder = (order: any): Order => {
       item: itemByitemId,
     })),
     amount: order.amount,
-    latlon: {
-      lat: order.latlon.coordinates[0],
-      lon: order.latlon.coordinates[1],
+
+    current: order.current_latlon && {
+      lat: order.current_latlon.coordinates[0],
+      lon: order.current_latlon.coordinates[1],
+    },
+    destination: order.destination_latlon && {
+      lat: order.destination_latlon.coordinates[0],
+      lon: order.destination_latlon.coordinates[1],
     },
 
     error: order.error,
@@ -61,16 +148,24 @@ export const unpackOrder = (order: any): Order => {
 };
 
 export const itemsQuery = gql`
-query {
-  item {
-    id
-    name
-    amount
-    category
-    description
-    imageUrl
+  query {
+    item {
+      id
+      name
+      amount
+      category
+      description
+      imageUrl
+    }
   }
-}
 `;
 
-export const unpackItems = (data: any) => [];
+export const unpackItems = (data: any) => {
+  console.log('TODO hasura.unpackItems', data);
+  return [];
+};
+
+export const unpackOrders = (data: any) => {
+  console.log('TODO hasura.unpackOrders', data);
+  return [];
+};
