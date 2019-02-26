@@ -39,16 +39,18 @@ const Cart = ({ }) => (
                       />
                     ))
                   }
-                  { !cart || cart.items.length === 0 &&
+                  { (!cart || cart.items.length === 0) &&
                     "Your cart is currently empty."
                   }
                   <Divider />
-                  <Elements>
-                    <CheckoutForm
-                      cartId={cart && cart.id}
-                      totalAmount={totalAmount}
-                    />
-                  </Elements>
+                  { cart && 
+                    <Elements>
+                      <CheckoutForm
+                        cartId={cart!.id}
+                        totalAmount={totalAmount}
+                      />
+                    </Elements>
+                  }
                 </>
               );
             }

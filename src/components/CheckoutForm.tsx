@@ -1,31 +1,28 @@
+import { History } from "history";
 import React, { useState } from 'react';
-import {
-  injectStripe,
-  CardElement,
-  ReactStripeElements,
-} from 'react-stripe-elements';
-import { Redirect } from 'react-router';
-
+import { RouteComponentProps, withRouter } from 'react-router';
+import { CardElement, injectStripe, ReactStripeElements } from 'react-stripe-elements';
 import CreateOrder, { CreateOrderType } from '../bind/CreateOrder';
-import LatLonInput from './LatLonInput';
 import { formatCurrency } from '../util/currency';
 import { LatLon } from '../util/types';
+import LatLonInput from './LatLonInput';
 
 const DEFAULT_DELIVERY_LOCATION = {
   lat: 43.761539,
   lon: -79.411079,
 };
 
-interface Props extends ReactStripeElements.InjectedStripeProps {
-  // FIXME: cart ID gets removed when order updates,
-  // but we need to redirect before unmount
-  cartId?: number,
-  totalAmount: number,
+interface Props extends
+  ReactStripeElements.InjectedStripeProps,
+  RouteComponentProps
+{
+  cartId: number
+  totalAmount: number
+  history: History
 }
 
 const CheckoutForm = (props: Props) => {
   const [center, setCenter] = useState<LatLon>(DEFAULT_DELIVERY_LOCATION);
-  const [orderId, setOrderId] = useState<number | null>(null);
 
   const handleSubmit = (createOrder: CreateOrderType) => async (ev: React.FormEvent) => {
     const { stripe, cartId, totalAmount } = props;
@@ -38,21 +35,17 @@ const CheckoutForm = (props: Props) => {
     try {
       console.log(cartId, totalAmount, token!.id, center);
       const orderId = await createOrder(
-        cartId!,
+        cartId,
         totalAmount,
         token!.id,
         center,
       );
       console.log('order id', orderId);
-      setOrderId(orderId);
+      props.history.push(`/orders/${orderId}`);
     } catch (err) {
       console.error('could not create order', err);
     }
   };
-
-  if (orderId) {
-    return <Redirect to={`/orders/${orderId}`} />;
-  }
 
   return (
     <CreateOrder>
@@ -80,4 +73,4 @@ const CheckoutForm = (props: Props) => {
   );
 };
 
-export default injectStripe(CheckoutForm);
+export default injectStripe(withRouter(CheckoutForm));
