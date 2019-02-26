@@ -52,7 +52,7 @@ const OrderView = ({ order, subscribe }: OrderViewProps) => {
         items.map(({ item, quantity }) => (
           <Item
             key={item.id}
-            price={item.amount}
+            amount={item.amount}
             name={item.name}
             description={item.description}
             quantity={quantity}

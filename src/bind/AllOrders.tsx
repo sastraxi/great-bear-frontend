@@ -1,21 +1,22 @@
+import { ApolloError } from 'apollo-client';
+import gql from 'graphql-tag';
 import React from 'react';
 import { Query } from 'react-apollo';
-import gql from 'graphql-tag';
 import { Order } from '../util/types';
-
-import { unpackOrder } from './transformers';
-import { ApolloError } from 'apollo-client';
+import currentVariant from './variant';
 
 export interface RenderProps {
   loading: boolean,
   error?: ApolloError,
-  orders?: [Order],
+  orders?: Order[],
   subscribe?(): void,
 }
 
 interface Props {
   children(props: RenderProps): JSX.Element,
 }
+
+const { unpackOrder } = currentVariant;
 
 const generateOrdersQuery = (type: 'query' | 'subscription') => gql`
   ${type} {

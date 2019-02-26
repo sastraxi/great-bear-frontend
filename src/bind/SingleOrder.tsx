@@ -1,10 +1,9 @@
+import { ApolloError } from 'apollo-client';
+import gql from 'graphql-tag';
 import React from 'react';
 import { Query } from 'react-apollo';
-import gql from 'graphql-tag';
 import { Order } from '../util/types';
-
-import { unpackOrder } from './transformers';
-import { ApolloError } from 'apollo-client';
+import currentVariant from './variant';
 
 export interface RenderProps {
   loading: boolean,
@@ -17,6 +16,8 @@ interface Props {
   orderId: number,
   children(props: RenderProps): JSX.Element,
 }
+
+const { unpackOrder } = currentVariant;
 
 const generateOrderQuery = (type: 'query' | 'subscription') => gql`
   ${type}($orderId: Int!) {
@@ -63,7 +64,7 @@ export default ({ orderId, children: renderChild }: Props) => (
 
         return renderChild({
           loading: false,
-          order,
+          order: order || undefined,
           subscribe: () =>
             subscribeToMore({
               document: ORDER_SUBSCRIPTION,

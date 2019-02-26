@@ -7,7 +7,7 @@ import Heading from '../view/Heading';
 import { Order } from '../util/types';
 
 interface Props {
-  orders: [Order],
+  orders: Order[],
   subscribe(): void,
 }
 

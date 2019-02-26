@@ -14,12 +14,12 @@ const Cart = ({ }) => (
       ({ setCartQuantity, loading: mutating }) => (
         <CurrentCart>
           {
-            ({ items, cartId, loading }) => {
+            ({ cart, loading }) => {
               if (loading) {
                 return <span>Loading...</span>;
               }
 
-              const totalAmount = items ? items
+              const totalAmount = cart ? cart.items
                 .map(ci => ci.quantity * ci.item.amount)
                 .reduce((a, b) => a + b, 0) : 0;
 
@@ -28,10 +28,10 @@ const Cart = ({ }) => (
                   <Header />
                   <Divider />
                   {
-                    items && items.map(({ item, quantity }) => (
+                    cart && cart.items.map(({ item, quantity }) => (
                       <Item
                         key={item.id}
-                        price={item.amount}
+                        amount={item.amount}
                         name={item.name}
                         description={item.description}
                         quantity={quantity}
@@ -44,7 +44,7 @@ const Cart = ({ }) => (
                   <Divider />
                   <Elements>
                     <CheckoutForm
-                      cartId={cartId!}
+                      cartId={cart!.id}
                       totalAmount={totalAmount}
                     />
                   </Elements>

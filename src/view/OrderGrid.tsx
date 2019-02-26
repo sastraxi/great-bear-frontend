@@ -12,7 +12,7 @@ const coalesce = (...args: any[]) => {
 };
 
 interface Props {
-  orders: [Order],
+  orders: Order[],
 }
 
 const Layout = styled.div`
