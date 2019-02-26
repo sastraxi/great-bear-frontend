@@ -29,7 +29,6 @@ export default ({ orderId, children: renderChild }: Props) => (
   <Query query={ORDER_QUERY} variables={{ orderId }}>
     {
       ({ subscribeToMore, loading, data, error }) => {
-        console.log(loading, data, error);
         if (loading) return renderChild({ loading });
         if (error) return renderChild({ loading: false, error });
 

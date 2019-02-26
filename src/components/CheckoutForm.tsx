@@ -30,20 +30,22 @@ const CheckoutForm = (props: Props) => {
 
     // the following automatically finds our CardElement
     const { token } = await stripe!.createToken();
-    if (!token) return; // card did not go through
+
+    // card did not go through.
+    // TODO: display an error to the user!
+    if (!token) return;
 
     try {
-      console.log(cartId, totalAmount, token!.id, center);
       const orderId = await createOrder(
         cartId,
         totalAmount,
         token!.id,
         center,
       );
-      console.log('order id', orderId);
       props.history.push(`/orders/${orderId}`);
     } catch (err) {
       console.error('could not create order', err);
+      // TODO: display an error to the user!
     }
   };
 
