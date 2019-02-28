@@ -161,13 +161,12 @@ export const unpackOrder = (data: any): Order | null => {
     amount: order.amount,
 
     destination: order.destinationJson && {
-      // FIXME: are these swapped??
-      lat: order.destinationJson.coordinates[0],
-      lon: order.destinationJson.coordinates[1],
+      lat: order.destinationJson.coordinates[1],
+      lon: order.destinationJson.coordinates[0],
     },
     current: order.currentJson && {
-      lat: order.currentJson.coordinates[0],
-      lon: order.currentJson.coordinates[1],
+      lat: order.currentJson.coordinates[1],
+      lon: order.currentJson.coordinates[0],
     },
 
     error: order.error,
