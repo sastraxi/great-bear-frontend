@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 
 const Wrap = styled.div`
@@ -6,7 +5,7 @@ const Wrap = styled.div`
   max-width: 720px;
 
   a {
-    color: unset;
+    color: #5699be;
     text-decoration: none;
   }
 `;

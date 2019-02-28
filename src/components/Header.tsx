@@ -9,7 +9,7 @@ const SPACE_BETWEEN = '15px';
 
 const Container = styled.div`
   display: flex;
-  align-items: baseline;
+  align-items: center;
 
   & > * {
     margin-left: ${SPACE_BETWEEN};

@@ -2,7 +2,9 @@ import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import DoLogin, { RenderProps } from '../bind/DoLogin';
 import authContext from '../components/auth/context';
+import AuthContainer from '../view/AuthContainer';
 import Logo from '../view/Logo';
+import Divider from '../view/Divider';
 
 const LoginInner = ({ login, loading }: RenderProps) => {
   const { setUser } = useContext(authContext);
@@ -16,8 +18,9 @@ const LoginInner = ({ login, loading }: RenderProps) => {
   };
 
   return (
-    <>
-      <Logo />
+    <AuthContainer>
+      <Logo centered />
+      <Divider />
       <form onSubmit={submissionHandler}>
         <input
           type="email"
@@ -37,8 +40,9 @@ const LoginInner = ({ login, loading }: RenderProps) => {
           disabled={!email || !password || loading}
         />
       </form>
-      <Link to="/signup">New here?</Link>
-    </>
+      <Divider />
+      <Link to="/signup">New here? Signup now.</Link>
+    </AuthContainer>
   );
 };
 
