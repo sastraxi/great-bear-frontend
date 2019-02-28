@@ -7,6 +7,7 @@ import Item from '../view/Item';
 import Status from '../view/Status';
 import { formatCurrency } from '../util/currency';
 import DebugView from '../view/DebugView';
+import DeliveryMap from '../components/DeliveryMap';
 
 interface OrderViewProps {
   order: Types.Order,
@@ -16,7 +17,7 @@ interface OrderViewProps {
 const OrderView = ({ order, subscribe }: OrderViewProps) => {
   useEffect(() => {
     if (subscribe) subscribe();
-  }, [subscribe]);
+  }, [!!subscribe]);
 
   const { items, ...restOrder } = order;
 
@@ -46,15 +47,19 @@ const OrderView = ({ order, subscribe }: OrderViewProps) => {
       <Status label="Total amount" value={formatCurrency(order.amount)} />
       <Status label="Submitted" value={order.createdAt} />
       { order.failedAt ? failureStatus() : happyStatus() }
-
       <Divider />
+
+      <DeliveryMap 
+        current={order.current}
+        destination={order.destination!}
+      />
+      <Divider />
+      
       {
         items.map(({ item, quantity }) => (
           <Item
             key={item.id}
-            price={item.amount}
-            name={item.name}
-            description={item.description}
+            {...item}
             quantity={quantity}
           />
         ))

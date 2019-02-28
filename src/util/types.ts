@@ -1,53 +1,67 @@
 import { Moment } from 'moment';
 
 export interface LatLon {
-  lat: number,
-  lon: number,
+  lat: number
+  lon: number
 }
 
 export interface Item {
-  id: number,
-  amount: number,
-  name: string,
-  description?: string,
-  imageUrl?: string,
+  id: number
+  name: string  
+  amount: number
+  category?: string
+  description?: string
+  imageUrl?: string
 }
 
 export interface CartItem {
-  quantity: number,
-  item: Item,
+  quantity: number
+  item: Item
 }
 
 export interface OrderItem extends CartItem { }
 
+export interface Cart {
+  id: number
+  items: CartItem[]
+}
+
 export interface WithMessage {
-  message?: string,
+  message?: string
 }
 
 export interface Order {
-  id: number,
-  items: [OrderItem],
-  amount: number,
-  latlon: LatLon,
+  id: number
+  items: [OrderItem]
+  amount: number
 
-  error?: WithMessage,
-  failedAt?: Moment,
+  destination?: LatLon
+  current?: LatLon
 
-  createdAt: Moment,
-  authorizedAt?: Moment,
-  verifiedAt?: Moment,
-  capturedAt?: Moment,
-  cookedAt?: Moment,
-  deliveredAt?: Moment,
+  error?: WithMessage
+  failedAt?: Moment
+
+  createdAt: Moment
+  authorizedAt?: Moment
+  verifiedAt?: Moment
+  capturedAt?: Moment
+  cookedAt?: Moment
+  deliveredAt?: Moment
 };
 
 export interface Geometry {
-  type: 'Point',
-  coordinates: [number, number],
+  type: 'Point'
+  coordinates: [number, number]
   crs: {
-    type: 'name',
+    type: 'name'
     properties: {
-      name: string,
-    },
-  },
+      name: string
+    }
+  }
+}
+
+export interface User {
+  id: number
+  email: string
+  isAdmin: boolean
 }

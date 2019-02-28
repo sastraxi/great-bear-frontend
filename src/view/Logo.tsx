@@ -5,19 +5,25 @@ import { LocationDescriptor } from 'history';
 
 interface Props {
   to?: LocationDescriptor
+  centered?: boolean
 }
 
-const LogoWrap = styled.span`
+const LogoWrap = styled.p<Props>`
+  margin: 0;
   font-weight: bold;
   font-size: 150%;
   letter-spacing: 5px;
+  text-align: ${props => props.centered ? 'center' : 'left'}
+
+  color: black;
 `;
 
 export default (props: Props) => {
-  const innerLogo = (<LogoWrap>GREAT ⭑ BEAR</LogoWrap>);
-  if (props.to) {
+  const { to, ...restProps } = props;
+  const innerLogo = (<LogoWrap {...restProps}>GREAT ⭑ BEAR</LogoWrap>);
+  if (to) {
     return (
-      <Link to={props.to}>
+      <Link to={to}>
         { innerLogo }
       </Link>
     );

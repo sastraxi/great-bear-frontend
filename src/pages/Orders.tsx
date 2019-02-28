@@ -7,14 +7,14 @@ import Heading from '../view/Heading';
 import { Order } from '../util/types';
 
 interface Props {
-  orders: [Order],
+  orders: Order[],
   subscribe(): void,
 }
 
 const OrdersView = ({ orders, subscribe }: Props) => {
   useEffect(() => {    
     if (subscribe) subscribe();
-  }, [subscribe]);
+  }, [!!subscribe]);
 
   return (
     <>

@@ -1,68 +1,37 @@
-import React, { Component, createRef } from 'react';
+import React, { useContext, useState } from 'react';
 import PopMenu from '../view/PopMenu';
-import LinkButton from '../view/LinkButton';
-
-type UserMenuState = {
-  showMenu: boolean,
-};
+import authContext from './auth/context';
+import LogoutButton from './auth/LogoutButton';
+import LinkButton from './LinkButton';
 
 /**
  * A simple drop-down menu. Modelled after
  * https://blog.campvanilla.com/reactjs-dropdown-menus-b6e06ae3a8fe
  */
-class UserMenu extends Component<{}, UserMenuState> {
-  constructor(props: any) {
-    super(props);
-    
-    this.state = {
-      showMenu: false,
-    };
-    
-    this.showMenu = this.showMenu.bind(this);
-    this.closeMenu = this.closeMenu.bind(this);
-  }
-  
-  menuRef = createRef<HTMLDivElement>();
+const UserMenu = () => {
+  const { user } = useContext(authContext);
+  const [showMenu, setMenuShown] = useState<boolean>(false);
 
-  showMenu(event: React.MouseEvent<HTMLButtonElement>) {
-    event.preventDefault();
-    
-    this.setState({ showMenu: true }, () => {
-      document.addEventListener('click', this.closeMenu);
-    });
-  }
-  
-  closeMenu(event: MouseEvent) {    
-    if (!this.menuRef.current ||
-        !this.menuRef.current!.contains(event.target as Element))
-    {
-      this.setState({ showMenu: false }, () => {
-        document.removeEventListener('click', this.closeMenu);
-      });  
-    }
-  }
+  const toggleMenu = () =>
+    setMenuShown(!showMenu);
 
-  renderMenu() {
-    return (
-      <PopMenu top="0px">
-        <LinkButton to="/orders">My orders</LinkButton>
-        <LinkButton to="/logout">Logout</LinkButton>
-      </PopMenu>
-    );
-  }
+  const renderMenu = () => (
+    <PopMenu top="0px">
+      <LinkButton to="/orders">My orders</LinkButton>
+      <LogoutButton>Logout</LogoutButton>
+    </PopMenu>
+  );
 
-  render() {
-    return (
+  return (
+    <div>
+      <button onClick={toggleMenu}>
+        { user!.email }
+      </button>
       <div>
-        <button onClick={this.showMenu}>
-          user@email.com
-        </button>
-        <div ref={this.menuRef}>
-          { this.state.showMenu && this.renderMenu() }
-        </div>          
-      </div>
-    );
-  }
-}
+        { showMenu && renderMenu() }
+      </div>          
+    </div>
+  );
+};
 
 export default UserMenu;

@@ -46,7 +46,7 @@ interface Props {
   imageUrl?: string,
   name: string,
   description?: string,
-  price: number,
+  amount: number,
   quantity?: number,
   onAddToCart?(): void,
   onQuantityUp?(): void,
@@ -57,7 +57,7 @@ interface Props {
 class Item extends Component<Props> {
   render() {
     const {
-      imageUrl, name, description, price, quantity,
+      imageUrl, name, description, amount, quantity,
       onAddToCart, onQuantityUp, onQuantityDown, onRemoveFromCart,
     } = this.props;
     return (
@@ -67,7 +67,7 @@ class Item extends Component<Props> {
         <Details>
           <Name>{ name }</Name>
           <Description>{ description || <i>This item has no description</i> }</Description>
-          <Price>{ formatCurrency(price) }</Price>
+          <Price>{ formatCurrency(amount) }</Price>
         </Details>
         { quantity && <Quantity>{ quantity }</Quantity> }
         { onQuantityUp && <button onClick={onQuantityUp}>+1</button> }

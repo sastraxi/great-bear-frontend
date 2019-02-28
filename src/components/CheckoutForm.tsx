@@ -1,29 +1,28 @@
+import { History } from "history";
 import React, { useState } from 'react';
-import {
-  injectStripe,
-  CardElement,
-  ReactStripeElements,
-} from 'react-stripe-elements';
-import { Redirect } from 'react-router';
-
+import { RouteComponentProps, withRouter } from 'react-router';
+import { CardElement, injectStripe, ReactStripeElements } from 'react-stripe-elements';
 import CreateOrder, { CreateOrderType } from '../bind/CreateOrder';
-import LatLonInput from './LatLonInput';
 import { formatCurrency } from '../util/currency';
 import { LatLon } from '../util/types';
+import LatLonInput from './LatLonInput';
 
 const DEFAULT_DELIVERY_LOCATION = {
   lat: 43.761539,
   lon: -79.411079,
 };
 
-interface Props extends ReactStripeElements.InjectedStripeProps {
-  cartId: number,
-  totalAmount: number,
+interface Props extends
+  ReactStripeElements.InjectedStripeProps,
+  RouteComponentProps
+{
+  cartId: number
+  totalAmount: number
+  history: History
 }
 
 const CheckoutForm = (props: Props) => {
   const [center, setCenter] = useState<LatLon>(DEFAULT_DELIVERY_LOCATION);
-  const [orderId, setOrderId] = useState<number | null>(null);
 
   const handleSubmit = (createOrder: CreateOrderType) => async (ev: React.FormEvent) => {
     const { stripe, cartId, totalAmount } = props;
@@ -31,25 +30,24 @@ const CheckoutForm = (props: Props) => {
 
     // the following automatically finds our CardElement
     const { token } = await stripe!.createToken();
-    if (!token) return; // card did not go through
+
+    // card did not go through.
+    // TODO: display an error to the user!
+    if (!token) return;
 
     try {
-      console.log(cartId, totalAmount, token!.id, center);
       const orderId = await createOrder(
         cartId,
         totalAmount,
         token!.id,
         center,
       );
-      setOrderId(orderId);
+      props.history.push(`/orders/${orderId}`);
     } catch (err) {
       console.error('could not create order', err);
+      // TODO: display an error to the user!
     }
   };
-
-  if (orderId) {
-    return <Redirect to={`/orders/${orderId}`} />;
-  }
 
   return (
     <CreateOrder>
@@ -67,7 +65,7 @@ const CheckoutForm = (props: Props) => {
               onChange={setCenter}
               showMapButton={false}
             />
-            <button disabled={loading || !props.totalAmount}>
+            <button disabled={loading || !props.totalAmount || !props.cartId}>
               Place order
             </button>
           </form>  
@@ -77,4 +75,4 @@ const CheckoutForm = (props: Props) => {
   );
 };
 
-export default injectStripe(CheckoutForm);
+export default injectStripe(withRouter(CheckoutForm));

@@ -5,6 +5,12 @@ import { Link } from 'react-router-dom';
 
 import { RenderProps as Props } from '../bind/CurrentCart';
 
+const Container = styled.span`
+  a {
+    color: unset !important;
+  }
+`;
+
 const Icon = styled(IoIosCart)`
   width: 20px;
   height: 20px;
@@ -15,19 +21,19 @@ const Icon = styled(IoIosCart)`
 const ShoppingCartIcon = ({ loading, totalQuantity, subscribe }: Props) => {
   useEffect(() => {    
     if (subscribe) subscribe();
-  }, [subscribe]);
+  }, [!!subscribe]);
 
   if (loading) {
-    return <span>...</span>;
+    return <Container>...</Container>;
   }
 
   return (
-    <span>
+    <Container>
       <Link to="/cart">
         <Icon />
         <b>{ totalQuantity }</b>
       </Link>
-    </span>  
+    </Container>  
   );
 };
 

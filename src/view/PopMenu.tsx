@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 interface Props {
   top: string | number,
-  align?: 'left' | 'right',
   children: JSX.Element[],
 };
 
@@ -15,7 +14,13 @@ const View = styled.div`
   position: absolute;
   right: 0;
   top: ${(props: Props) => props.top};
-  text-align: ${(props: Props) => props.align};
+
+  display: flex;
+  flex-direction: column;
+
+  & > * {
+    display: block;
+  }
 `;
 
 const PopMenu = (props: Props) => (
