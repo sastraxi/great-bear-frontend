@@ -9,7 +9,7 @@ interface Props {
 
 /**
  * Adapted from https://github.com/hasura/react-check-auth
- * to work with authentication via GraphQL.
+ * to work with authentication via GraphQL (and use hooks)!
  */
 const AuthProvider = ({ fetchUser, children }: Props) => {
   const [loading, setLoading] = useState(defaultState.loading);
