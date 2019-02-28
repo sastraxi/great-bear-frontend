@@ -11,13 +11,6 @@ import Signup from './pages/Signup';
 import Wrap from './view/Wrap';
 
 class App extends Component {
-  componentDidMount() {
-    fetch(`${process.env.REACT_APP_BACKEND_URL}`, { credentials: 'include' }).then(() => {
-      // force a call to the actual
-      // TODO: the call to login will do this for us, can remove later
-    });
-  }
-
   render() {
     return (
       <Wrap>
