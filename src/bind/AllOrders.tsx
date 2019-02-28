@@ -1,5 +1,4 @@
 import { ApolloError } from 'apollo-client';
-import gql from 'graphql-tag';
 import React from 'react';
 import { Query } from 'react-apollo';
 import { Order } from '../util/types';
@@ -19,7 +18,7 @@ interface Props {
 const {
   generateOrdersQuery,
   unpackOrders,
-  ordersSubscriptionUntransform,
+  ordersSubscriptionMerge,
 } = currentVariant;
 
 const ORDERS_QUERY = generateOrdersQuery('query');
@@ -42,11 +41,11 @@ export default ({
           subscribe: () =>
             subscribeToMore({
               document: ORDERS_SUBSCRIPTION,
-              updateQuery: (prev, { subscriptionData }) => {
-                return subscriptionData.data
-                  ? ordersSubscriptionUntransform(subscriptionData.data)
-                  : prev;
-              },
+              updateQuery: (prev, { subscriptionData }) =>
+                ordersSubscriptionMerge(
+                  prev,
+                  subscriptionData.data
+                ),
             }),
         });
       }

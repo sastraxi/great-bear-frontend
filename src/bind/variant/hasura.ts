@@ -35,9 +35,9 @@ export const unpackCart = (data: any): Cart | null => {
   };
 };
 
-export const cartSubscriptionUntransform = (data: any) => data;
-export const ordersSubscriptionUntransform = (data: any) => data;
-export const orderSubscriptionUntransform = (data: any) => data;
+export const cartSubscriptionMerge = (prev: any, data: any) => data || prev;
+export const ordersSubscriptionMerge = (prev: any, data: any) => data || prev;
+export const orderSubscriptionMerge = (prev: any, data: any) => data || prev;
 
 export const createOrderMutation = gql`
   mutation($cartId: Int!, $amount: Int!, $stripeToken: String!, $latlon: geometry!) {

@@ -20,7 +20,7 @@ interface Props {
 const {
   generateCartQuery,
   unpackCart,
-  cartSubscriptionUntransform,
+  cartSubscriptionMerge,
 } = currentVariant;
 
 const CART_QUERY = generateCartQuery('query');
@@ -47,11 +47,11 @@ export default ({ children: renderChild }: Props) => (
           subscribe: () =>
             subscribeToMore({
               document: CART_SUBSCRIPTION,
-              updateQuery: (prev, { subscriptionData }) => {
-                return subscriptionData.data
-                  ? cartSubscriptionUntransform(subscriptionData.data)
-                  : prev;
-              },
+              updateQuery: (prev, { subscriptionData }) =>
+                cartSubscriptionMerge(
+                  prev,
+                  subscriptionData.data,
+                ),
             }),
         });
       }

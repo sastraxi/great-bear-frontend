@@ -1,3 +1,4 @@
+import unionBy from 'lodash/unionBy';
 import gql from 'graphql-tag';
 import { Cart, Order, LatLon } from '../../util/types';
 import toMoment from '../../util/to-moment';
@@ -58,10 +59,11 @@ export const unpackCart = (data: any): Cart | null => {
   };
 };
 
-export const cartSubscriptionUntransform = (data: any) => {
+export const cartSubscriptionMerge = (prev: any, data: any) => {
+  if (!data) return prev;
   return {
     currentCart: data.currentCart.cart,
-  }
+  };
 };
 
 /* ***************************** */
@@ -180,9 +182,12 @@ export const unpackOrder = (data: any): Order | null => {
   };
 };
 
-export const orderSubscriptionUntransform = (data: any) => ({
-  orderById: data.orderById.order,
-});
+export const orderSubscriptionMerge = (prev: any, data: any) => {
+  if (!data) return prev;
+  return {
+    orderById: data.orderById.order,
+  };
+};
 
 /* ***************************** */
   
@@ -240,9 +245,16 @@ export const unpackOrders = (data: any) =>
 const idCompareDescending = (a: any, b:any) => b.id - a.id;
 
 // sort the list descending so we get the same ordering as query
-export const ordersSubscriptionUntransform = (data: any) => ({
-  ordersList: data.orders.orders.sort(idCompareDescending),
-});
+export const ordersSubscriptionMerge = (prev: any, data: any) => {
+  if (!data) return prev;
+  return {
+    ordersList: unionBy(
+      data.orders.orders,
+      prev.ordersList,
+      (order: any) => order.id,
+    ).sort(idCompareDescending),
+  };
+};
 
 /* ***************************** */
 

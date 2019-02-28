@@ -19,7 +19,7 @@ interface Props {
 const {
   generateOrderQuery,
   unpackOrder,
-  orderSubscriptionUntransform,
+  orderSubscriptionMerge,
 } = currentVariant;
 
 const ORDER_QUERY = generateOrderQuery('query');
@@ -41,11 +41,11 @@ export default ({ orderId, children: renderChild }: Props) => (
             subscribeToMore({
               document: ORDER_SUBSCRIPTION,
               variables: { orderId },
-              updateQuery: (prev, { subscriptionData }) => {
-                return subscriptionData.data
-                  ? orderSubscriptionUntransform(subscriptionData.data)
-                  : prev;
-              },
+              updateQuery: (prev, { subscriptionData }) =>
+                orderSubscriptionMerge(
+                  prev,
+                  subscriptionData.data,
+                ),
             }),
         });
       }
