@@ -14,9 +14,7 @@ interface Props {
 
 const signupMutation = gql`
   mutation {
-    logout {
-      clientMutationId
-    }
+    logout
   }
 `;
 

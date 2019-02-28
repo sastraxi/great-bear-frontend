@@ -2,10 +2,9 @@ import gql from 'graphql-tag';
 import React from 'react';
 import { Mutation } from 'react-apollo';
 import { User } from '../util/types';
-import { FetchResult } from 'apollo-link';
 
 export interface RenderProps {
-  login(email: string, password: string): FetchResult<User>,
+  login(email: string, password: string): Promise<User>,
   loading: boolean,
 }
 
@@ -29,7 +28,8 @@ export default ({ children: renderChild }: Props) => (
       (mutate, { loading }) => {
         return renderChild({
           login: (email, password) =>
-            mutate({ variables: { email, password }}),
+            mutate({ variables: { email, password }})
+              .then(({ data }: any) => data.login),
           loading,
         });
       }

@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { Link } from 'react-router-dom';
 import DoLogin, { RenderProps } from '../bind/DoLogin';
+import authContext from '../components/auth/context';
 import Logo from '../view/Logo';
 
-import { Link } from 'react-router-dom';
-
 const LoginInner = ({ login, loading }: RenderProps) => {
+  const { setUser } = useContext(authContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
-  const submissionHandler = (e: React.FormEvent) => {
+
+  const submissionHandler = async (e: React.FormEvent) => {
     e.preventDefault();
-    login(email, password);
+    const user = await login(email, password);
+    setUser(user);
   };
 
   return (

@@ -1,6 +1,7 @@
 import React, { Component, createRef } from 'react';
 import PopMenu from '../view/PopMenu';
-import LinkButton from '../view/LinkButton';
+import LogoutButton from './auth/LogoutButton';
+import LinkButton from './LinkButton';
 
 type UserMenuState = {
   showMenu: boolean,
@@ -46,7 +47,7 @@ class UserMenu extends Component<{}, UserMenuState> {
     return (
       <PopMenu top="0px">
         <LinkButton to="/orders">My orders</LinkButton>
-        <LinkButton to="/logout">Logout</LinkButton>
+        <LogoutButton>Logout</LogoutButton>
       </PopMenu>
     );
   }

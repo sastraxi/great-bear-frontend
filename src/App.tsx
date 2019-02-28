@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
+import GuestRoute from './components/auth/GuestRoute';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 import Cart from './pages/Cart';
 import Login from './pages/Login';
 import Menu from './pages/Menu';
@@ -21,13 +23,13 @@ class App extends Component {
       <Wrap>
         <Switch>
 
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/signup" component={Signup} />
+          <GuestRoute exact path="/login" component={Login} />
+          <GuestRoute exact path="/signup" component={Signup} />
 
-          <Route exact path="/" component={Menu} />
-          <Route exact path="/cart" component={Cart} />
-          <Route exact path="/orders" component={Orders} />
-          <Route
+          <ProtectedRoute exact path="/" component={Menu} />
+          <ProtectedRoute exact path="/cart" component={Cart} />
+          <ProtectedRoute exact path="/orders" component={Orders} />
+          <ProtectedRoute
             exact
             path="/orders/:id"
             render={({ match }) => <Order orderId={+match.params.id} />}
