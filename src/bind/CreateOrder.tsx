@@ -1,6 +1,5 @@
 import React from 'react';
 import { Mutation } from 'react-apollo';
-import toGeometry from '../util/to-geometry';
 import { LatLon } from '../util/types';
 import currentVariant from './variant';
 
