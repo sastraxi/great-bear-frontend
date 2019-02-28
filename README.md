@@ -23,3 +23,4 @@
 
 * create a `current_user` view (hasura)
 * split up variant code into folders and add mutations
+* why doesn't the cart go down to 0 when we checkout?

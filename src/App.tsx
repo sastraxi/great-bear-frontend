@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import Wrap from './view/Wrap';
-
-import { Switch, Route, match } from 'react-router-dom';
-
-import Menu from './pages/Menu';
+import { Route, Switch } from 'react-router-dom';
 import Cart from './pages/Cart';
+import Login from './pages/Login';
+import Menu from './pages/Menu';
 import Order from './pages/Order';
 import Orders from './pages/Orders';
+import Signup from './pages/Signup';
+import Wrap from './view/Wrap';
 
 class App extends Component {
   componentDidMount() {
@@ -20,6 +20,10 @@ class App extends Component {
     return (
       <Wrap>
         <Switch>
+
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/signup" component={Signup} />
+
           <Route exact path="/" component={Menu} />
           <Route exact path="/cart" component={Cart} />
           <Route exact path="/orders" component={Orders} />
@@ -28,6 +32,7 @@ class App extends Component {
             path="/orders/:id"
             render={({ match }) => <Order orderId={+match.params.id} />}
           />
+
         </Switch>
       </Wrap>
     );

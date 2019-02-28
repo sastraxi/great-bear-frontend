@@ -15,7 +15,7 @@ const Icon = styled(IoIosCart)`
 const ShoppingCartIcon = ({ loading, totalQuantity, subscribe }: Props) => {
   useEffect(() => {    
     if (subscribe) subscribe();
-  }, [subscribe]);
+  }, [!!subscribe]);
 
   if (loading) {
     return <span>...</span>;

@@ -14,7 +14,7 @@ interface Props {
 const OrdersView = ({ orders, subscribe }: Props) => {
   useEffect(() => {    
     if (subscribe) subscribe();
-  }, [subscribe]);
+  }, [!!subscribe]);
 
   return (
     <>

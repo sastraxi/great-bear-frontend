@@ -16,7 +16,7 @@ interface OrderViewProps {
 const OrderView = ({ order, subscribe }: OrderViewProps) => {
   useEffect(() => {
     if (subscribe) subscribe();
-  }, [subscribe]);
+  }, [!!subscribe]);
 
   const { items, ...restOrder } = order;
 
