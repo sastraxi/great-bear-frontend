@@ -17,7 +17,6 @@ const signupMutation = gql`
     login(email: $email, password: $password) {
       id
       email
-      isAdmin
     }
   }
 `;
