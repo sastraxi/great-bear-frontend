@@ -85,7 +85,7 @@ export const unpackOrderId = (data: any) =>
 
 const orderQuery = gql`
   query($orderId: Int!) {
-    orderById(id: $orderId) {
+    order(id: $orderId) {
       id
       amount
       currentJson
@@ -117,7 +117,7 @@ const orderQuery = gql`
 
 const orderSubscription = gql`
   subscription($orderId: Int!) {
-    orderById(id: $orderId) {
+    order(id: $orderId) {
       order {
         id
         amount
@@ -153,7 +153,7 @@ export const generateOrderQuery = (type: 'query' | 'subscription') =>
   (type === 'query' ? orderQuery : orderSubscription);
 
 export const unpackOrder = (data: any): Order | null => {
-  const { orderById: order } = data;
+  const { order } = data;
   if (!order) return null;
   return {
     id: order.id,
@@ -184,7 +184,7 @@ export const unpackOrder = (data: any): Order | null => {
 export const orderSubscriptionMerge = (prev: any, data: any) => {
   if (!data) return prev;
   return {
-    orderById: data.orderById.order,
+    order: data.order.order,
   };
 };
 
