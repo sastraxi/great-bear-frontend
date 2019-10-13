@@ -1,14 +1,15 @@
 # Great Bear Web Frontend
 * This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app)
 * Apollo Client is used for GraphQL functionality
-* This is a frontend for the following projects:
+* This is a frontend for the following variants of [the Great Bear Project](https://github.com/sastraxi/great-bear):
   * [great-bear-hasura](https://github.com/sastraxi/great-bear-hasura) (`hasura` variant)
-  * [great-bear-graphile](https://github.com/sastraxi/great-bear-graphile) (`graphile` variant)
-  * [great-bear-prisma](https://github.com/sastraxi/great-bear-prisma) (`prisma` variant)
+  * [great-bear-postgraphile](https://github.com/sastraxi/great-bear-postgraphile) (`postgraphile` variant)
 
 ### Getting started
-* `cp .env.example .env`; make sure you've set the right `VARIANT`
+* choose a variant backend and start it
+* `cp .env.example .env`; make sure you've set the right `VARIANT` and URL for the backend
 * `yarn start`
+* go to http://localhost:3000 (by default)
 
 ### Resources
 * https://www.howtographql.com/react-apollo
