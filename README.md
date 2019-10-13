@@ -6,10 +6,10 @@
   * [great-bear-postgraphile](https://github.com/sastraxi/great-bear-postgraphile) (`postgraphile` variant)
 
 ### Getting started
-* choose a variant backend and start it
-* `cp .env.example .env`; make sure you've set the right `VARIANT` and URL for the backend
-* `yarn start`
-* go to http://localhost:3000 (by default)
+* Choose a variant backend and follow its Getting started section.
+* `cp .env.example .env`; make sure you've set the right `VARIANT` and URL for the backend.
+* Run the frontend with `yarn start`.
+* Navigate to http://localhost:3000 (by default).
 
 ### Resources
 * https://www.howtographql.com/react-apollo
