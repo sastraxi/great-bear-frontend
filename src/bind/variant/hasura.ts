@@ -9,13 +9,14 @@ export const generateCartQuery = (type: 'query' | 'subscription') => gql`
   ${type} {
     current_cart {
       id
-      cartItemsByCartId {
+      cartItems {
         quantity
-        itemByitemId {
+        item {
           id
           amount
           name
           description
+          image_url
         }
       }
     }
@@ -24,13 +25,13 @@ export const generateCartQuery = (type: 'query' | 'subscription') => gql`
 
 export const unpackCart = (data: any): Cart | null => {
   if (!data.current_cart) return null;
-  const cart = data.current_cart[0];
-  const { cartItemsByCartId: items, id } = cart;
+  const cart = data.current_cart[0] || { id: undefined, cartItems: []};
+  const { cartItems, id } = cart;
   return {
     id,
-    items: items.map(({ quantity, itemByitemId }: any) => ({
+    items: cartItems.map(({ quantity, item }: any) => ({
       quantity,
-      item: itemByitemId,
+      item,
     })),
   };
 };
@@ -76,13 +77,14 @@ export const generateOrdersQuery = (type: 'query' | 'subscription') => gql`
       cooked_at
       delivered_at
 
-      orderItemsByorderId {
+      orderItems {
         quantity
-        itemByitemId {
+        item {
           id
           amount
           name
           description
+          image_url
         }   
       }
     }
@@ -106,13 +108,14 @@ export const generateOrderQuery = (type: 'query' | 'subscription') => gql`
       cooked_at
       delivered_at
 
-      orderItemsByorderId {
+      orderItems {
         quantity
-        itemByitemId {
+        item {
           id
           amount
           name
           description
+          image_url
         }   
       }
     }
@@ -122,12 +125,12 @@ export const generateOrderQuery = (type: 'query' | 'subscription') => gql`
 export const unpackOrder = (data: any): Order | null => {
   if (!data.order[0]) return null;
   const order = data.order[0];
-  const { orderItemsByorderId: items } = order;
+  const { orderItems } = order;
   return {
     id: order.id,
-    items: items.map(({ quantity, itemByitemId }: any) => ({
+    items: orderItems.map(({ quantity, item }: any) => ({
       quantity,
-      item: itemByitemId,
+      item,
     })),
     amount: order.amount,
 
@@ -152,6 +155,11 @@ export const unpackOrder = (data: any): Order | null => {
   };
 };
 
+export const unpackOrders = (data: any) => {
+  console.log('TODO hasura.unpackOrders', data);
+  return [];
+};
+
 export const itemsQuery = gql`
   query {
     item {
@@ -160,17 +168,15 @@ export const itemsQuery = gql`
       amount
       category
       description
-      imageUrl
+      image_url
     }
   }
 `;
 
 export const unpackItems = (data: any) => {
-  console.log('TODO hasura.unpackItems', data);
-  return [];
-};
-
-export const unpackOrders = (data: any) => {
-  console.log('TODO hasura.unpackOrders', data);
-  return [];
+  console.log('FIXME? hasura.unpackItems', data);
+  return data.item.map(({ image_url, ...item }: any) => ({
+    ...item,
+    imageUrl: image_url,
+  }));
 };
