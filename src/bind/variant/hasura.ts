@@ -5,6 +5,26 @@ import toGeometry from '../../util/to-geometry';
 
 export const packLatLon = (coord: LatLon) => toGeometry(coord);
 
+export const itemsQuery = gql`
+  query {
+    item {
+      id
+      name
+      amount
+      category
+      description
+      image_url
+    }
+  }
+`;
+
+export const unpackItem = ({ image_url, ...item }: any) =>
+    ({ ...item, imageUrl: image_url });
+
+export const unpackItems = (data: any) => {
+  return data.item.map(unpackItem);
+};
+
 export const generateCartQuery = (type: 'query' | 'subscription') => gql`
   ${type} {
     cart {
@@ -25,13 +45,13 @@ export const generateCartQuery = (type: 'query' | 'subscription') => gql`
 
 export const unpackCart = (data: any): Cart | null => {
   if (!data.cart) return null;
-  const cart = data.cart[0] || { id: undefined, cartItems: []};
+  const cart = data.cart[0] || { id: undefined, cartItems: [] };
   const { cartItems, id } = cart;
   return {
     id,
     items: cartItems.map(({ quantity, item }: any) => ({
       quantity,
-      item,
+      item: unpackItem(item),
     })),
   };
 };
@@ -65,7 +85,8 @@ export const generateOrdersQuery = (type: 'query' | 'subscription') => gql`
     order(order_by: { id: desc }) {
       id
       amount
-      latlon
+      current_latlon
+      destination_latlon
 
       error
       failed_at
@@ -96,7 +117,8 @@ export const generateOrderQuery = (type: 'query' | 'subscription') => gql`
     order(where: { id: { _eq: $orderId }}) {
       id
       amount
-      latlon
+      current_latlon
+      destination_latlon
 
       error
       failed_at
@@ -125,12 +147,13 @@ export const generateOrderQuery = (type: 'query' | 'subscription') => gql`
 export const unpackOrder = (data: any): Order | null => {
   if (!data.order[0]) return null;
   const order = data.order[0];
+  console.log('order', order);
   const { orderItems } = order;
-  return {
+  const ret = {
     id: order.id,
     items: orderItems.map(({ quantity, item }: any) => ({
       quantity,
-      item,
+      item: unpackItem(item),
     })),
     amount: order.amount,
 
@@ -153,29 +176,11 @@ export const unpackOrder = (data: any): Order | null => {
     cookedAt: toMoment(order.cooked_at),
     deliveredAt: toMoment(order.delivered_at),
   };
+  console.log('returning...', ret);
+  return ret;
 };
 
 export const unpackOrders = (data: any) => {
-  console.log('TODO hasura.unpackOrders', data);
-  return [];
-};
-
-export const itemsQuery = gql`
-  query {
-    item {
-      id
-      name
-      amount
-      category
-      description
-      image_url
-    }
-  }
-`;
-
-export const unpackItems = (data: any) => {
-  return data.item.map(({ image_url, ...item }: any) => ({
-    ...item,
-    imageUrl: image_url,
-  }));
+  const { order: orders } = data;
+  return orders.map((order: any) => unpackOrder({ order: [order] }));
 };
