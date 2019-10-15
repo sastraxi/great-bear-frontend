@@ -7,7 +7,7 @@ export const packLatLon = (coord: LatLon) => toGeometry(coord);
 
 export const generateCartQuery = (type: 'query' | 'subscription') => gql`
   ${type} {
-    current_cart {
+    cart {
       id
       cartItems {
         quantity
@@ -24,8 +24,8 @@ export const generateCartQuery = (type: 'query' | 'subscription') => gql`
 `;
 
 export const unpackCart = (data: any): Cart | null => {
-  if (!data.current_cart) return null;
-  const cart = data.current_cart[0] || { id: undefined, cartItems: []};
+  if (!data.cart) return null;
+  const cart = data.cart[0] || { id: undefined, cartItems: []};
   const { cartItems, id } = cart;
   return {
     id,
@@ -47,7 +47,7 @@ export const createOrderMutation = gql`
         cart_id: $cartId,
         amount: $amount,
         stripe_token: $stripeToken,
-        latlon: $latlon
+        destination_latlon: $latlon
       }
     ]) {
       returning {
@@ -174,7 +174,6 @@ export const itemsQuery = gql`
 `;
 
 export const unpackItems = (data: any) => {
-  console.log('FIXME? hasura.unpackItems', data);
   return data.item.map(({ image_url, ...item }: any) => ({
     ...item,
     imageUrl: image_url,
